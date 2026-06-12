@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fully Alive Market - Oil Lab Dashboard</title>
+    <!-- Tailwind CSS for Modern Styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .oil-card { transition: all 0.2s ease-in-out; }
+        .oil-card:hover { transform: translateY(-2px); }
+        .accordion-content { transition: max-height 0.3s ease-out, opacity 0.2s ease-out; }
+        .accordion-content.collapsed { max-height: 0 !important; overflow: hidden; opacity: 0; padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; border: none !important; }
+        .toggle-icon { transition: transform 0.2s ease; }
+        .toggle-icon.rotated { transform: rotate(-90deg); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen">
+
+    <!-- Header Navigation -->
+    <header class="bg-emerald-700 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-wide">FULLY ALIVE MARKET</h1>
+                <p class="text-xs text-emerald-100 uppercase tracking-widest mt-0.5">Essential Oil Lab & Formulation Hub</p>
+            </div>
+            <div class="text-sm bg-emerald-800/50 px-4 py-2 rounded-full border border-emerald-600/30">
+                Logged in as: <strong>Madison</strong>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8 space-y-6">
+        
+        <!-- SECTION 1: LAB FORMULATION & COST CALCULATOR -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div onclick="toggleSection('calcContent', 'calcArrow')" class="bg-slate-100/50 px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-slate-100 transition-colors border-b border-slate-200">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">💰</span>
+                    <h2 class="text-lg font-bold text-slate-900">Lab Formulation & Cost Calculator</h2>
+                </div>
+                <span id="calcArrow" class="toggle-icon text-slate-500 font-bold text-lg">▼</span>
+            </div>
+
+            <div id="calcContent" class="accordion-content p-6 space-y-6">
+                <!-- Core Batch Variables -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Batch Size</label>
+                        <input type="number" id="batchSize" value="4" min="0.1" step="any" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg outline-none text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Unit</label>
+                        <select id="batchUnit" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg outline-none text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500">
+                            <option value="oz">Fluid Ounces (fl oz)</option>
+                            <option value="mL">Milliliters (mL)</option>
+                            <option value="g">Grams (g)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Carrier Base Type</label>
+                        <select id="carrierSelect" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg outline-none text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500 text-slate-700" onchange="calculateFormulation()">
+                            <option value="jojoba">Jojoba Oil ($2.50 / oz)</option>
+                            <option value="coconut">Fractionated Coconut ($0.80 / oz)</option>
+                            <option value="almond">Sweet Almond ($0.95 / oz)</option>
+                            <option value="lard">Organic Pure Lard ($0.45 / oz)</option>
+                            <option value="shea">Unrefined Shea Butter ($1.20 / oz)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-semibold uppercase tracking-wider text-slate-500">Dilution</label>
+                            <span id="dilutionValue" class="text-xs font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">2%</span>
+                        </div>
+                        <input type="range" id="dilutionRate" min="0.5" max="5" step="0.5" value="2" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600 mt-2">
+                    </div>
+                </div>
+
+                <!-- NEW: Packaging Supply Materials Cost Configuration Fields -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">📦 Container Packaging Unit Costs</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Jar Cost (per unit)</label>
+                            <div class="relative rounded-md shadow-2xs">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-xs">$</span>
+                                <input type="number" id="jarCost" value="1.10" min="0" step="0.01" class="w-full pl-7 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg outline-none text-xs focus:ring-2 focus:ring-emerald-500" oninput="calculateFormulation()">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Lid Cost (per unit)</label>
+                            <div class="relative rounded-md shadow-2xs">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-xs">$</span>
+                                <input type="number" id="lidCost" value="0.25" min="0" step="0.01" class="w-full pl-7 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg outline-none text-xs focus:ring-2 focus:ring-emerald-500" oninput="calculateFormulation()">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-600 mb-1">Label Cost (per unit)</label>
+                            <div class="relative rounded-md shadow-2xs">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-xs">$</span>
+                                <input type="number" id="labelCost" value="0.40" min="0" step="0.01" class="w-full pl-7 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg outline-none text-xs focus:ring-2 focus:ring-emerald-500" oninput="calculateFormulation()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic EO Component Allocation -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-sm font-bold text-slate-700">Essential Oil Components</h3>
+                        <button type="button" onclick="addOilRow()" class="text-xs font-bold text-emerald-700 hover:text-emerald-900 bg-emerald-100 hover:bg-emerald-200 px-2.5 py-1 rounded transition-colors">+ Add EO to Mix</button>
+                    </div>
+                    
+                    <div id="oilRowsContainer" class="space-y-2">
+                        <!-- Rows dynamically generated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Financial & Quantity Results Engine Panel -->
+                <div class="bg-slate-900 text-slate-100 p-5 rounded-xl space-y-4 shadow-inner">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center border-b border-slate-800 pb-3">
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Carrier Volume</p>
+                            <p id="carrierResult" class="text-base font-mono font-bold text-white mt-0.5">--</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Total Target EO</p>
+                            <p id="eoResult" class="text-base font-mono font-bold text-emerald-400 mt-0.5">--</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-amber-400 uppercase font-bold tracking-wider">Total Batch Cost</p>
+                            <p id="totalCostResult" class="text-xl font-mono font-extrabold text-amber-400 mt-0.5">$0.00</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">True Cost Per Jar</p>
+                            <p id="unitCostResult" class="text-xl font-mono font-extrabold text-emerald-400 mt-0.5">$0.00</p>
+                        </div>
+                    </div>
+
+                    <!-- Drops Budgeting Interface -->
+                    <div id="dropsBudgetContainer" class="grid grid-cols-3 gap-2 bg-slate-950 p-3 rounded-lg text-center border border-slate-800">
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase">Target Budget</p>
+                            <p id="totalBudgetDrops" class="text-sm font-mono font-bold text-slate-300">--</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase">Allocated</p>
+                            <p id="allocatedDrops" class="text-sm font-mono font-bold text-blue-400">0</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase">Remaining Balance</p>
+                            <p id="remainingDrops" class="text-sm font-mono font-extrabold text-emerald-400">--</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Save Experiment Action -->
+                <div class="flex gap-2">
+                    <input type="text" id="recipeName" placeholder="Give this experimental recipe a name..." class="flex-1 px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm outline-none focus:bg-white focus:ring-2 focus:ring-emerald-500">
+                    <button type="button" onclick="saveRecipe()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm px-5 py-2 rounded-lg shadow-sm transition-all">💾 Save Blueprint</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: STORED BLEND BLUEPRINTS -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div onclick="toggleSection('blueprintsContent', 'blueprintsArrow')" class="bg-slate-100/50 px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-slate-100 transition-colors border-b border-slate-200">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">📚</span>
+                    <h2 class="text-lg font-bold text-slate-900">Stored Blend Blueprints</h2>
+                </div>
+                <span id="blueprintsArrow" class="toggle-icon text-slate-500 font-bold text-lg">▼</span>
+            </div>
+
+            <div id="blueprintsContent" class="accordion-content p-6">
+                <div id="savedRecipesList" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-1">
+                    <!-- Saved recipes appear here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: DIRECTORY SEARCH ENGINE -->
+        <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div onclick="toggleSection('searchContent', 'searchArrow')" class="bg-slate-100/50 px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-slate-100 transition-colors border-b border-slate-200">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">🔍</span>
+                    <h2 class="text-lg font-bold text-slate-900">Property & Inventory Filters</h2>
+                </div>
+                <span id="searchArrow" class="toggle-icon text-slate-500 font-bold text-lg">▼</span>
+            </div>
+
+            <div id="searchContent" class="accordion-content p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Text Search</label>
+                        <input type="text" id="searchBar" placeholder="Search oil names, profiles, targeted benefits..." class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg outline-none text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Filter by Use Category</label>
+                        <select id="benefitFilter" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg outline-none text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500 text-slate-600">
+                            <option value="all">⚡ All Categories & Uses</option>
+                            <option value="Skin Healing">🩹 Skin Healing, Skincare & Acne</option>
+                            <option value="Spider Veins">🦵 Spider Veins & Circulation</option>
+                            <option value="Tummy Pain">🍃 Tummy Pain, IBS & Digestion</option>
+                            <option value="Anxiety">🧠 Anxiety, Stress & Sleep</option>
+                            <option value="Arthritis">🦴 Arthritis, Joints & Rheumatic Pain</option>
+                            <option value="Muscle Pain">💪 Muscle Pain & Spasms</option>
+                            <option value="Bugs">🦟 Bug, Pest & Lice Defense</option>
+                            <option value="Teeth">🦷 Teeth & Oral Care</option>
+                            <option value="Fights Bacteria">🧫 Fights Bacteria & Infections</option>
+                            <option value="Respiratory Support">🫁 Respiratory & Bronchitis Help</option>
+                            <option value="Cancer Fighting">🛡️ Cancer Fighting Support</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: PROMINENT MASTER OIL GRID -->
+        <section class="space-y-4">
+            <div class="flex items-center gap-2 px-2">
+                <span class="text-xl">🌿</span>
+                <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Master Essential Oil Directory</h2>
+            </div>
+            
+            <div id="oilGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Oils rendered dynamically -->
+            </div>
+            
+            <div id="emptyView" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300">
+                <p class="text-slate-400 font-medium">No matching properties or oils found.</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 1. Core Master Inventory Structure Array
+        const essentialOils = [
+            { name: "Bergamot", botanical: "Citrus bergamia", profile: "Citrus, Floral, Complex", benefits: ["Skin Healing", "Tummy Pain", "Anxiety", "Arthritis"], safety: "Highly phototoxic. Avoid UV/sun exposure for 12 hours after use unless using Bergapten-Free (FCF).", tips: "Madison's Note: Reduces stress, stimulates circulation, improves digestion, and alleviates pain.", defCost: 18.50, defSize: 1 },
+            { name: "Black Pepper", botanical: "Piper nigrum", profile: "Sharp, Hot, Spicy, Peppery", benefits: ["Arthritis"], safety: "Can cause skin flushing and irritation if over-applied. Dilute carefully.", tips: "Brings intense localized warmth and circulation directly to cold, stiff joints.", defCost: 22.00, defSize: 1 },
+            { name: "Calendula (Infused)", botanical: "Calendula officinalis", profile: "Faintly Sweet, Warm, Herbaceous, Earthy", benefits: ["Skin Healing", "Bugs"], safety: "Extremely safe, mild, and non-irritating. Avoid only if there is a known severe ragweed allergy.", tips: "Madison's Note: A must-have powerhouse for outdoor bug sprays and skin salves. Deeply soothes angry bug bites, stops itching, calms eczema, reduces swelling, and accelerates skin tissue repair.", defCost: 8.00, defSize: 4 },
+            { name: "Carrot Seed", botanical: "Daucus carota", profile: "Earthy, Woody, Herbaceous", benefits: ["Teeth", "Fights Bacteria", "Tummy Pain"], safety: "Avoid completely during pregnancy.", tips: "Madison's Note: Packed with Vitamins A, C & Antioxidants. Helps with detox, expels gas, acts as a general tonic, cures infections, and stimulates growth.", defCost: 24.50, defSize: 1 },
+            { name: "Cedarwood", botanical: "Juniperus virginiana", profile: "Woody, Balsamic, Rich, Warm", benefits: ["Bugs"], safety: "Generally safe and non-irritating when diluted appropriately.", tips: "An excellent grounding base note that repels fleas, ticks, and ants effectively.", defCost: 9.00, defSize: 2 },
+            { name: "Chamomile (Roman)", botanical: "Chamaemelum nobile", profile: "Sweet, Apple-like, Herbaceous", benefits: ["Skin Healing", "Anxiety", "Arthritis", "Muscle Pain"], safety: "Avoid if there is a known severe allergy to ragweed or daisies.", tips: "Madison's Note: Key cooling component in custom muscle pain relief blends.", defCost: 45.00, defSize: 0.5 },
+            { name: "Citronella", botanical: "Cymbopogon nardus", profile: "Fresh, Powerful, Lemongrass-like", benefits: ["Bugs"], safety: "Can cause skin irritation if applied old or undiluted. Keep away from eyes.", tips: "The classic, time-tested backbone for natural outdoor bug and mosquito repellents.", defCost: 12.00, defSize: 4 },
+            { name: "Clary Sage", botanical: "Salvia sclarea", profile: "Earthy, Herbaceous, Faintly Sweet", benefits: ["Anxiety", "Arthritis"], safety: "CRITICAL: Pregnant women must avoid use entirely as it can actively induce contractions.", tips: "Wonderful for hormone harmony support and smoothing out nervous tension when not pregnant.", defCost: 21.00, defSize: 1 },
+            { name: "Clove", botanical: "Syzygium aromaticum", profile: "Spicy, Warm, Pungent", benefits: ["Teeth", "Tummy Pain", "Respiratory Support", "Fights Bacteria", "Muscle Pain"], safety: "Strong skin irritant. Maximum dermal dilution of 0.5% is highly recommended.", tips: "Madison's Note: Antimicrobial, targets toothaches, muscle pain, digestive upset, and respiratory conditions like coughs and asthma. Acts as a warming agent.", defCost: 14.00, defSize: 2 },
+            { name: "Eucalyptus", botanical: "Eucalyptus globulus", profile: "Pungent, Sharp, Camphorous", benefits: ["Bugs", "Respiratory Support", "Arthritis", "Tummy Pain", "Muscle Pain"], safety: "Avoid use on or near the face of infants and young children.", tips: "Madison's Note: Key cooling component in muscle pain blends; used in upset tummy formulas.", defCost: 11.00, defSize: 4 },
+            { name: "Fennel", botanical: "Foeniculum vulgare", profile: "Sweet, Clean, Licorice-like, Herbal", benefits: ["Tummy Pain", "Respiratory Support", "Fights Bacteria"], safety: "Avoid if prone to seizures or if pregnant/estrogen-sensitive.", tips: "Madison's Note: Exceptional for digestive disorders, gastrointestinal spasms, flatulence, nausea, constipation, IBS, cellulite, bronchitis, and parasitic infections.", defCost: 16.50, defSize: 1 },
+            { name: "Frankincense", botanical: "Boswellia carterii", profile: "Warm, Woody, Resinous, Spicy", benefits: ["Skin Healing", "Teeth", "Tummy Pain", "Respiratory Support", "Anxiety", "Arthritis", "Bugs", "Cancer Fighting"], safety: "Generally non-irritating and incredibly well-tolerated across skin types.", tips: "Madison's Note: Reduces arthritis, anti-inflammatory, improves gut function, helps asthma, prevents bad breath/toothaches/cavities/mouth sores, fights certain cancers, and eases stress.", defCost: 28.00, defSize: 1 },
+            { name: "Geranium", botanical: "Pelargonium graveolens", profile: "Heavy, Sweet, Rose-like Floral", benefits: ["Bugs", "Anxiety"], safety: "Can cause mild contact dermatitis in individuals with hyper-sensitive skin.", tips: "Particularly effective at repelling ticks; balances out sharp medicinal insect notes.", defCost: 22.00, defSize: 1 },
+            { name: "Ginger", botanical: "Zingiber officinale", profile: "Warm, Spicy, Earthy, Woody", benefits: ["Tummy Pain", "Muscle Pain", "Cancer Fighting", "Arthritis", "Respiratory Support", "Bugs"], safety: "May cause mild skin irritation if applied to highly sensitive areas.", tips: "Madison's Note: Eliminates toxins, boosts digestion, targets IBS, clears respiratory tract, addresses aches, inflammation, food poisoning, malaria/mosquitoes, joint pain, cancer, enhances sex drive, and regulates sugar. Actively warms.", defCost: 19.50, defSize: 1 },
+            { name: "Grapefruit", botanical: "Citrus paradisi", profile: "Fresh, Sweet, Tangy Citrus", benefits: ["Tummy Pain", "Fights Bacteria", "Bugs", "Anxiety"], safety: "Phototoxic. Avoid direct sunlight on the skin for 12 hours after application.", tips: "Madison's Note: Improves digestion, increases energy/mood, fights infections, addresses depression, removes toxins, increases urination, boosts immune system, and stimulates hormone secretion.", defCost: 13.00, defSize: 2 },
+            { name: "Grapevine", botanical: "Vitis vinifera (Extract)", profile: "Faint, Green, Earthy", benefits: ["Skin Healing", "Spider Veins"], safety: "Extremely mild and non-irritating.", tips: "Madison's Note: Part of the 5-step blueprint protocol to reduce and shrink spider veins.", defCost: 15.00, defSize: 4 },
+            { name: "Horse Chestnut Seed", botanical: "Aesculus hippocastanum", profile: "Mild, Nutty, Faintly Sweet", benefits: ["Skin Healing", "Spider Veins"], safety: "Use as an extract/carrier infusion. Do not apply to open, bleeding wounds.", tips: "Madison's Note: Major pillar ingredient in the blueprint protocol to reduce and shrink spider veins.", defCost: 18.00, defSize: 4 },
+            { name: "Juniper Berry", botanical: "Juniperus communis", profile: "Fresh, Balsamic, Woody-Pine", benefits: ["Skin Healing", "Anxiety", "Tummy Pain", "Fights Bacteria"], safety: "Avoid if suffering from acute or chronic kidney inflammation.", tips: "Madison's Note: Targets skin care, acne, dermatitis, eczema, helps with stress/anxiety, treats cellulite, boosts digestion, relieves bloating, and provides antibacterial properties.", defCost: 21.00, defSize: 1 },
+            { name: "Lavender", botanical: "Lavandula angustifolia", profile: "Sweet, Floral, Herbaceous", benefits: ["Skin Healing", "Bugs", "Anxiety", "Arthritis", "Spider Veins", "Tummy Pain", "Muscle Pain"], safety: "Extremely gentle. One of the safest oils for direct skin contact (when diluted).", tips: "Madison's Note: Used for muscle pain blends, upset tummy mix, and part of the spider vein blueprint script.", defCost: 15.00, defSize: 2 },
+            { name: "Lemon", botanical: "Citrus limon", profile: "Bright, Sharp Citrus, Clean", benefits: ["Skin Healing", "Tummy Pain", "Respiratory Support", "Anxiety"], safety: "Phototoxic. Do not expose application area to sunlight for 12 hours post-use.", tips: "Madison's Note: Skin care support, relieves stress, boosts immune, treats asthma/stomach disorders, assists hair care, and aids weight loss.", defCost: 11.00, defSize: 2 },
+            { name: "Lemongrass", botanical: "Cymbopogon citratus", profile: "Strong, Lemon-like, Herbaceous", benefits: ["Bugs"], safety: "High skin irritation risk. Dilute to a maximum of 0.7% for topical use.", tips: "Highly effective at deterring ticks and flying pests; adds clean power to blends.", defCost: 10.00, defSize: 2 },
+            { name: "Myrrh", botanical: "Commiphora myrrha", profile: "Warm, Earthy, Woody, Balsamic", benefits: ["Skin Healing", "Teeth", "Tummy Pain", "Muscle Pain", "Fights Bacteria", "Cancer Fighting"], safety: "Avoid completely during pregnancy and lactation.", tips: "Madison's Note: Kills harmful bacteria/parasites, supports oral health, heals sores/skin, combats pain/swelling, fights free radicals, protects liver, serves as a powerful antioxidant, can act as sunscreen, and slows cancer cells.", defCost: 34.00, defSize: 1 },
+            { name: "Orange (Sweet)", botanical: "Citrus sinensis", profile: "Sweet, Fresh, Juicy Citrus", benefits: ["Tummy Pain", "Muscle Pain", "Anxiety", "Arthritis", "Skin Healing", "Fights Bacteria"], safety: "Very low phototoxicity risk compared to Lemon, but still exercise mild caution in direct sun.", tips: "Madison's Note: Helps muscle spasms, soothes sore muscles and joints, ups energy/mood, helps digestion/immune system, fights acne, and belongs in the upset tummy mixture.", defCost: 9.00, defSize: 4 },
+            { name: "Oregano", botanical: "Origanum vulgare", profile: "Heavy, Spicy, Hot Herbal", benefits: ["Tummy Pain", "Respiratory Support", "Fights Bacteria", "Muscle Pain", "Cancer Fighting"], safety: "Extreme skin irritant. Must be diluted heavily (Max 1% for short-term localized use).", tips: "Madison's Note: Treats yeast infections, anti-inflammatory, pain reliever, antioxidant, lowers cholesterol, improves gut health, offers respiratory/antifungal/viral help, and promotes digestion.", defCost: 16.00, defSize: 1 },
+            { name: "Peppermint", botanical: "Mentha piperita", profile: "Strong Minty, Fresh, Crisp", benefits: ["Bugs", "Arthritis", "Tummy Pain"], safety: "Highly intense. Avoid close proximity to eyes and mucus membranes.", tips: "Madison's Note: Used as a prime cooling element for pain and a principal component in the upset tummy formulation.", defCost: 14.00, defSize: 2 },
+            { name: "Pine", botanical: "Pinus sylvestris", profile: "Strong, Fresh, Forest-like, Woody", benefits: ["Skin Healing", "Respiratory Support", "Anxiety", "Bugs", "Arthritis"], safety: "Must be diluted properly; oxidized pine oil can cause severe skin irritation.", tips: "Madison's Note: Good for skin care, removing lice, food poisoning help, stimulates urination to eliminate toxins, relieves joint/arthritis/rheumatic pain, anti-inflammatory, relieves stress, and reduces infections.", defCost: 12.00, defSize: 4 },
+            { name: "Rose", botanical: "Rosa damascena", profile: "Deep, Rich, Absolute Floral", benefits: ["Anxiety", "Arthritis"], safety: "Highly safe when diluted. Extremely concentrated.", tips: "A luxury oil that brings deep emotional soothing and premium luxury to skin formulas.", defCost: 120.00, defSize: 0.17 },
+            { name: "Rosemary", botanical: "Rosmarinus officinalis", profile: "Strong, Clear, Herbal, Woody", benefits: ["Bugs", "Arthritis", "Muscle Pain"], safety: "Avoid use during pregnancy or if diagnosed with high blood pressure.", tips: "Madison's Note: Critical operational element used in the custom muscle pain blending block.", defCost: 13.00, defSize: 2 },
+            { name: "Sandalwood", botanical: "Santalum album", profile: "Rich, Sweet, Warm, Woody", benefits: ["Anxiety"], safety: "Very low risk of irritation. Excellent skin compatibility.", tips: "Provides a long-lasting premium aroma base note while soothing racing thoughts.", defCost: 65.00, defSize: 0.5 },
+            { name: "Sea Pine Bark", botanical: "Pinus pinaster (Extract)", profile: "Woody, Resinous, Dry", benefits: ["Skin Healing", "Spider Veins"], safety: "Safe when diluted; monitor hypersensitive skin types.", tips: "Madison's Note: Essential structural compound used in the spider vein reduction script.", defCost: 16.00, defSize: 4 },
+            { name: "Tarragon", botanical: "Artemisia dracunculus", profile: "Sweet, Anise-like, Spicy, Green", benefits: ["Arthritis", "Anxiety", "Fights Bacteria"], safety: "Avoid entirely during pregnancy or while breastfeeding.", tips: "Madison's Note: Targets arthritis, stimulates appetite, boosts mood, relieves stress, counteracts insomnia, antibacterial, and helps the urinary system.", defCost: 19.00, defSize: 1 },
+            { name: "Tea Tree", botanical: "Melaleuca alternifolia", profile: "Medicinal, Fresh, Camphorous", benefits: ["Bugs"], safety: "Can cause skin sensitization if oxidized. External use only.", tips: "Perfect for purifying post-bite skin irritation and keeping pests away.", defCost: 12.00, defSize: 2 },
+            { name: "Turmeric", botanical: "Curcuma longa", profile: "Warm, Spicy, Woody, Earthy", benefits: ["Arthritis"], safety: "May slightly stain light skin or fabrics if used in high concentrations.", tips: "Packed with turmerones to target deep, chronic joint throbbing and systemic swelling.", defCost: 18.00, defSize: 1 },
+            { name: "Valerian Root", botanical: "Valeriana officinalis", profile: "Heavy, Musky, Earthy, Pungent", benefits: ["Anxiety"], safety: "Strong sedative. Do not operate machinery or drive vehicles after use.", tips: "Madison's Note: Powerful sedative properties, relieves insomnia, targets nervous tension, aids skin/hair issues, helps anxiety/stress, and lowers blood pressure.", defCost: 26.00, defSize: 1 },
+            { name: "Vetiver", botanical: "Cruseogopon zizanioides", profile: "Deep, Smoky, Earthy, Heavy Wood", benefits: ["Anxiety"], safety: "Very gentle, non-irritating, and non-sensitizing.", tips: "Known as the 'Oil of Tranquility'. Incredible base note for profound grounding.", defCost: 32.00, defSize: 1 },
+            { name: "Wintergreen", botanical: "Gaultheria procumbens", profile: "Strong, Sweet, Minty, Pungent", benefits: ["Teeth", "Respiratory Support", "Fights Bacteria", "Skin Healing", "Muscle Pain"], safety: "Contains methyl salicylate. Avoid if taking blood thinners or if aspirin-sensitive.", tips: "Madison's Note: Treats bacterial infections, colds, headaches, colic, skin conditions, sore throats, and tooth decay. Major element in muscle pain formulas.", defCost: 16.00, defSize: 2 },
+            { name: "Yarrow", botanical: "Achillea millefolium", profile: "Sweet, Sharp, Herbaceous (Often Blue)", benefits: ["Skin Healing", "Spider Veins", "Muscle Pain"], safety: "May cause skin sensitization in rare cases. Avoid during pregnancy.", tips: "Madison's Note: Vital component for the custom muscle pain blend and spider vein reduction script.", defCost: 29.00, defSize: 0.5 },
+            { name: "Ylang Ylang", botanical: "Cananga odorata", profile: "Intense, Sweet, Exotic Floral", benefits: ["Tummy Pain", "Fights Bacteria", "Anxiety"], safety: "Can cause headaches if used in excess; maximum safe dermal limit of 0.8%.", tips: "Madison's Note: Eases anxiety, insomnia, acts as a digestive aid, reduces inflammation, boosts energy/mood, and features in the tummy pain formulation.", defCost: 24.00, defSize: 1 }
+        ];
+
+        const carrierPrices = { jojoba: 2.50, coconut: 0.80, almond: 0.95, lard: 0.45, shea: 1.20 };
+
+        // 2. UI Collapsible Controller Architecture
+        function toggleSection(contentId, arrowId) {
+            const content = document.getElementById(contentId);
+            const arrow = document.getElementById(arrowId);
+            content.classList.toggle('collapsed');
+            arrow.classList.toggle('rotated');
+        }
+
+        // 3. Calculator State Engine
+        function addOilRow(oilName = "", dropsValue = 0) {
+            const container = document.getElementById('oilRowsContainer');
+            const rowId = 'row_' + Date.now() + Math.random().toString(36).substr(2, 5);
+            
+            const rowDiv = document.createElement('div');
+            rowDiv.className = "flex gap-2 items-center bg-white p-2 rounded-lg border border-slate-200 shadow-2xs";
+            rowDiv.id = rowId;
+
+            let optionsHtml = `<option value="">-- Choose an Oil --</option>`;
+            essentialOils.forEach(oil => {
+                const selected = oil.name === oilName ? 'selected' : '';
+                optionsHtml += `<option value="${oil.name}" ${selected}>${oil.name}</option>`;
+            });
+
+            rowDiv.innerHTML = `
+                <select class="row-oil flex-1 px-2 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs outline-none focus:bg-white" onchange="calculateFormulation()">
+                    ${optionsHtml}
+                </select>
+                <div class="flex items-center gap-1 w-24">
+                    <input type="number" value="${dropsValue}" min="0" class="row-drops w-full px-2 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs text-center outline-none focus:bg-white" oninput="calculateFormulation()">
+                    <span class="text-[10px] font-semibold text-slate-400 uppercase">Gtts</span>
+                </div>
+                <button type="button" onclick="removeOilRow('${rowId}')" class="text-slate-400 hover:text-rose-600 px-1 text-sm font-bold transition-colors">✕</button>
+            `;
+            container.appendChild(rowDiv);
+            calculateFormulation();
+        }
+
+        function removeOilRow(id) {
+            const row = document.getElementById(id);
+            if(row) row.remove();
+            calculateFormulation();
+        }
+
+        function calculateFormulation() {
+            const size = parseFloat(document.getElementById('batchSize').value) || 0;
+            const rate = parseFloat(document.getElementById('dilutionRate').value) / 100;
+            const unit = document.getElementById('batchUnit').value;
+            const chosenCarrier = document.getElementById('carrierSelect').value;
+            
+            // Fetch current individual element packaging costs
+            const jarCost = parseFloat(document.getElementById('jarCost').value) || 0;
+            const lidCost = parseFloat(document.getElementById('lidCost').value) || 0;
+            const labelCost = parseFloat(document.getElementById('labelCost').value) || 0;
+            const packageUnitTotal = jarCost + lidCost + labelCost;
+
+            document.getElementById('dilutionValue').innerText = (rate * 100).toFixed(1) + '%';
+            
+            const eoAmount = size * rate;
+            const carrierAmount = size - eoAmount;
+            
+            document.getElementById('carrierResult').innerText = `${carrierAmount.toFixed(2)} ${unit}`;
+            document.getElementById('eoResult').innerText = `${eoAmount.toFixed(2)} ${unit}`;
+            
+            let sizeInOz = size;
+            if (unit === 'mL') sizeInOz = size * 0.033814;
+            else if (unit === 'g') sizeInOz = size * 0.035274; 
+
+            let budgetDrops = 0;
+            if (unit === 'oz') budgetDrops = eoAmount * 600;
+            else if (unit === 'mL') budgetDrops = eoAmount * 20;
+            else if (unit === 'g') budgetDrops = eoAmount * 20;
+
+            document.getElementById('totalBudgetDrops').innerText = Math.round(budgetDrops);
+
+            let assignedDrops = 0;
+            let totalEoCost = 0;
+            
+            const dynamicOilCosts = JSON.parse(localStorage.getItem('famOilLabCosts')) || {};
+
+            document.querySelectorAll('#oilRowsContainer > div').forEach(row => {
+                const oilName = row.querySelector('.row-oil').value;
+                const drops = parseInt(row.querySelector('.row-drops').value) || 0;
+                
+                if (!oilName) return; 
+                assignedDrops += drops;
+
+                const match = essentialOils.find(o => o.name === oilName);
+                if (match) {
+                    const price = dynamicOilCosts[`${oilName}_price`] !== undefined ? parseFloat(dynamicOilCosts[`${oilName}_price`]) : match.defCost;
+                    const netSize = dynamicOilCosts[`${oilName}_size`] !== undefined ? parseFloat(dynamicOilCosts[`${oilName}_size`]) : match.defSize;
+                    
+                    const costPerDrop = price / (netSize * 600);
+                    totalEoCost += (drops * costPerDrop);
+                }
+            });
+
+            const carrierCostPerOz = carrierPrices[chosenCarrier] || 0;
+            const totalCarrierCost = (carrierAmount * (sizeInOz / size)) * carrierCostPerOz;
+            
+            // Raw Liquid/Salves Formulation Cost
+            const totalIngredientCost = totalCarrierCost + totalEoCost;
+            
+            // Number of targeted retail container units in this run (Assuming batch size corresponds directly to single target sizes)
+            // For costing scale projections, we determine the actual packaging units required
+            // Standard approach assumes batch size directly addresses a single target container output fill scale logic (e.g. 4oz batch = 1 4oz jar)
+            const packagingUnitsCount = sizeInOz / 4; // Normalized base benchmark ratio (e.g. 4 oz jar)
+            
+            const totalPackagingCost = packagingUnitsCount * packageUnitTotal;
+            const totalBatchCost = totalIngredientCost + totalPackagingCost;
+            
+            // Calculate true cost per individual 4 oz jar output layout 
+            const trueCostPerJar = totalBatchCost / (packagingUnitsCount > 0 ? packagingUnitsCount : 1);
+
+            document.getElementById('totalCostResult').innerText = isNaN(totalBatchCost) ? "$0.00" : `$${totalBatchCost.toFixed(2)}`;
+            document.getElementById('unitCostResult').innerText = isNaN(trueCostPerJar) ? "$0.00" : `$${trueCostPerJar.toFixed(2)}`;
+
+            const remaining = Math.round(budgetDrops) - assignedDrops;
+            document.getElementById('allocatedDrops').innerText = assignedDrops;
+            
+            const remainingEl = document.getElementById('remainingDrops');
+            remainingEl.innerText = remaining;
+
+            if (remaining < 0) {
+                remainingEl.className = "text-sm font-mono font-extrabold text-rose-500";
+            } else if (remaining === 0) {
+                remainingEl.className = "text-sm font-mono font-extrabold text-sky-400";
+            } else {
+                remainingEl.className = "text-sm font-mono font-extrabold text-emerald-400";
+            }
+        }
+
+        // 4. Persistence management for blend blueprints
+        function saveRecipe() {
+            const name = document.getElementById('recipeName').value.trim();
+            if (!name) {
+                alert("Please type a blueprint name before saving.");
+                return;
+            }
+
+            const size = document.getElementById('batchSize').value;
+            const unit = document.getElementById('batchUnit').value;
+            const dilution = document.getElementById('dilutionRate').value;
+
+            let ingredients = [];
+            document.querySelectorAll('#oilRowsContainer > div').forEach(row => {
+                const oil = row.querySelector('.row-oil').value;
+                const drops = row.querySelector('.row-drops').value;
+                if(oil) ingredients.push({ oil, drops: parseInt(drops) || 0 });
+            });
+
+            const recipe = { name, size, unit, dilution, ingredients, timestamp: Date.now() };
+            let blueprints = JSON.parse(localStorage.getItem('falledMarketBlueprints')) || [];
+            blueprints.unshift(recipe);
+            localStorage.setItem('falledMarketBlueprints', JSON.stringify(blueprints));
+
+            document.getElementById('recipeName').value = '';
+            renderSavedRecipes();
+        }
+
+        function loadRecipe(index) {
+            let blueprints = JSON.parse(localStorage.getItem('falledMarketBlueprints')) || [];
+            const recipe = blueprints[index];
+            if (!recipe) return;
+
+            document.getElementById('batchSize').value = recipe.size;
+            document.getElementById('batchUnit').value = recipe.unit;
+            document.getElementById('dilutionRate').value = recipe.dilution;
+
+            const container = document.getElementById('oilRowsContainer');
+            container.innerHTML = '';
+            recipe.ingredients.forEach(ing => addOilRow(ing.oil, ing.drops));
+            calculateFormulation();
+            
+            document.getElementById('calcContent').classList.remove('collapsed');
+            document.getElementById('calcArrow').classList.remove('rotated');
+        }
+
+        function deleteRecipe(index, event) {
+            event.stopPropagation();
+            if(!confirm("Are you sure you want to delete this blueprint recipe?")) return;
+            let blueprints = JSON.parse(localStorage.getItem('falledMarketBlueprints')) || [];
+            blueprints.splice(index, 1);
+            localStorage.setItem('falledMarketBlueprints', JSON.stringify(blueprints));
+            renderSavedRecipes();
+        }
+
+        function renderSavedRecipes() {
+            const container = document.getElementById('savedRecipesList');
+            let blueprints = JSON.parse(localStorage.getItem('falledMarketBlueprints')) || [];
+            
+            if (blueprints.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 italic py-2 text-center col-span-full">No saved experimental blueprints yet.</p>`;
+                return;
+            }
+
+            container.innerHTML = blueprints.map((rec, i) => {
+                const ingSummary = rec.ingredients.map(ing => `${ing.drops}gtts ${ing.oil}`).join(', ');
+                return `
+                    <div onclick="loadRecipe(${i})" class="group bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 p-3 rounded-xl flex justify-between items-center cursor-pointer transition-all">
+                        <div class="flex-1 min-w-0 pr-2">
+                            <h4 class="text-xs font-bold text-slate-900 truncate">${rec.name}</h4>
+                            <p class="text-[10px] text-slate-500 mt-0.5 font-medium">${rec.size}${rec.unit} @ ${rec.dilution}% — <span class="text-slate-400 font-normal italic">${ingSummary || 'No EOs listed'}</span></p>
+                        </div>
+                        <button onclick="deleteRecipe(${i}, event)" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-rose-600 font-bold text-xs p-1 transition-all">✕</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 5. Financial Inventory Matrix Persistence Controllers
+        function saveOilPriceMetrics(oilName) {
+            const priceInput = document.getElementById(`cost_input_${oilName}`).value;
+            const sizeInput = document.getElementById(`size_input_${oilName}`).value;
+            
+            let allCosts = JSON.parse(localStorage.getItem('famOilLabCosts')) || {};
+            allCosts[`${oilName}_price`] = parseFloat(priceInput) || 0;
+            allCosts[`${oilName}_size`] = parseFloat(sizeInput) || 1;
+            
+            localStorage.setItem('famOilLabCosts', JSON.stringify(allCosts));
+            calculateFormulation(); 
+        }
+
+        function saveCustomOilNote(oilName) {
+            const textarea = document.getElementById(`note_input_${oilName}`);
+            const noteText = textarea.value.trim();
+            
+            let allNotes = JSON.parse(localStorage.getItem('famOilLabNotes')) || {};
+            if (noteText) allNotes[oilName] = noteText;
+            else delete allNotes[oilName];
+            
+            localStorage.setItem('famOilLabNotes', JSON.stringify(allNotes));
+            renderDirectory();
+        }
+
+        // 6. Dynamic High-Prominence Master Directory Renderer
+        function renderDirectory() {
+            const searchQuery = document.getElementById('searchBar').value.toLowerCase();
+            const selectedBenefit = document.getElementById('benefitFilter').value;
+            const grid = document.getElementById('oilGrid');
+            const emptyView = document.getElementById('emptyView');
+            
+            const savedNotes = JSON.parse(localStorage.getItem('famOilLabNotes')) || {};
+            const savedCosts = JSON.parse(localStorage.getItem('famOilLabCosts')) || {};
+            
+            grid.innerHTML = '';
+            
+            const filtered = essentialOils.filter(oil => {
+                const customNote = (savedNotes[oil.name] || '').toLowerCase();
+                const matchesSearch = oil.name.toLowerCase().includes(searchQuery) || 
+                                      oil.profile.toLowerCase().includes(searchQuery) ||
+                                      oil.tips.toLowerCase().includes(searchQuery) ||
+                                      customNote.includes(searchQuery) ||
+                                      oil.benefits.some(b => b.toLowerCase().includes(searchQuery));
+                const matchesBenefit = selectedBenefit === 'all' || oil.benefits.includes(selectedBenefit);
+                return matchesSearch && matchesBenefit;
+            });
+
+            if (filtered.length === 0) {
+                emptyView.classList.remove('hidden');
+                return;
+            }
+            emptyView.classList.add('hidden');
+
+            filtered.forEach(oil => {
+                const card = document.createElement('div');
+                card.className = "oil-card bg-white p-5 rounded-2xl shadow-xs border border-slate-200 flex flex-col justify-between";
+                
+                const tagsHtml = oil.benefits.map(b => 
+                    `<span class="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">${b}</span>`
+                ).join('');
+
+                const isWarningHeavy = oil.safety.includes("CRITICAL") || oil.safety.includes("Phototoxic") || oil.safety.includes("Avoid");
+                const safetyClass = isWarningHeavy ? "bg-amber-50 text-amber-950 border border-amber-200" : "bg-slate-50 text-slate-600";
+                
+                const currentNoteText = savedNotes[oil.name] || '';
+                
+                const currentPrice = savedCosts[`${oil.name}_price`] !== undefined ? savedCosts[`${oil.name}_price`] : oil.defCost;
+                const currentSize = savedCosts[`${oil.name}_size`] !== undefined ? savedCosts[`${oil.name}_size`] : oil.defSize;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-baseline gap-2 mb-2">
+                            <h3 class="text-lg font-bold text-slate-900">${oil.name}</h3>
+                            <span class="text-xs italic text-slate-400 font-mono">${oil.botanical}</span>
+                        </div>
+                        <p class="text-xs font-medium text-slate-500 mb-2">Scent Profile: <span class="font-normal text-slate-600">${oil.profile}</span></p>
+                        <div class="flex flex-wrap gap-1 mb-4">${tagsHtml}</div>
+                        <p class="text-xs text-slate-700 leading-relaxed mb-4"><strong>Formulation Note:</strong> ${oil.tips}</p>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Wholesale Cost ($)</label>
+                                <input type="number" id="cost_input_${oil.name}" value="${currentPrice}" step="0.01" min="0" 
+                                    class="w-full text-xs px-2 py-1 bg-white border border-slate-300 rounded outline-none" oninput="saveOilPriceMetrics('${oil.name}')">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Container Size (Net Oz)</label>
+                                <input type="number" id="size_input_${oil.name}" value="${currentSize}" step="0.01" min="0.01" 
+                                    class="w-full text-xs px-2 py-1 bg-white border border-slate-300 rounded outline-none" oninput="saveOilPriceMetrics('${oil.name}')">
+                            </div>
+                        </div>
+
+                        <div class="text-[11px] p-3 rounded-xl ${safetyClass}">
+                            <strong>⚠️ Lab Safety Warning:</strong> ${oil.safety}
+                        </div>
+                        
+                        <div class="border-t border-slate-100 pt-3">
+                            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Madison's Custom Lab Notes</label>
+                            <textarea id="note_input_${oil.name}" placeholder="Type batch details or metrics here..." 
+                                class="w-full text-xs p-2 bg-slate-50/50 border border-slate-200 rounded-lg outline-none focus:bg-white focus:border-emerald-500 transition-colors resize-y min-h-[50px]">${currentNoteText}</textarea>
+                            <div class="flex justify-end mt-1">
+                                <button onclick="saveCustomOilNote('${oil.name}')" class="text-[10px] font-bold text-emerald-700 hover:text-white bg-emerald-50 hover:bg-emerald-600 border border-emerald-200 px-2.5 py-1 rounded transition-all">💾 Save Note</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // 7. Global Observers & Startup Sequence
+        document.getElementById('batchSize').addEventListener('input', calculateFormulation);
+        document.getElementById('batchUnit').addEventListener('change', calculateFormulation);
+        document.getElementById('dilutionRate').addEventListener('input', calculateFormulation);
+        document.getElementById('searchBar').addEventListener('input', renderDirectory);
+        document.getElementById('benefitFilter').addEventListener('change', renderDirectory);
+
+        // Core Bootup Configuration
+        addOilRow();
+        calculateFormulation();
+        renderDirectory();
+        renderSavedRecipes();
+    </script>
+</body>
+</html>
