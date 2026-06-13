@@ -53,6 +53,7 @@
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Target Yield Size</label>
                             <input type="number" id="batchSize" value="4" min="0.1" step="any" oninput="calculateFormulation()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg outline-none text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500">
                         </div>
+
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Unit of Output</label>
                             <select id="batchUnit" onchange="calculateFormulation()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg outline-none text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500">
@@ -61,6 +62,7 @@
                                 <option value="g">Grams (g)</option>
                             </select>
                         </div>
+
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Target Retail Container Size</label>
                             <select id="oilContainerSize" onchange="calculateFormulation()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg outline-none text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500 text-slate-700">
@@ -109,68 +111,4 @@
                     <div class="bg-slate-900 text-slate-100 p-5 rounded-xl shadow-inner">
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                             <div>
-                                <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Total Product Mass</p>
-                                <p id="oilTotalMassResult" class="text-base font-mono font-bold text-white mt-0.5">--</p>
-                            </div>
-                            <div>
-                                <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Estimated Jar Yield</p>
-                                <p id="oilJarYieldResult" class="text-base font-mono font-bold text-emerald-400 mt-0.5">--</p>
-                            </div>
-                            <div>
-                                <p class="text-[10px] text-amber-400 uppercase font-bold tracking-wider">Total Batch COGS</p>
-                                <p id="totalCostResult" class="text-xl font-mono font-extrabold text-amber-400 mt-0.5">$0.00</p>
-                            </div>
-                            <div>
-                                <p class="text-[10px] text-emerald-400 uppercase font-bold tracking-wider">True Cost Per Unit</p>
-                                <p id="unitCostResult" class="text-xl font-mono font-extrabold text-emerald-400 mt-0.5">$0.00</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex gap-2">
-                        <input type="text" id="recipeName" placeholder="Give this experimental recipe a name..." class="flex-1 px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm outline-none focus:bg-white focus:ring-2 focus:ring-emerald-500">
-                        <button type="button" onclick="saveRecipe()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm px-5 py-2 rounded-lg shadow-sm transition-all cursor-pointer">💾 Save Blueprint</button>
-                    </div>
-                </div>
-            </section>
-
-            <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div onclick="toggleSection('blueprintsContent', 'blueprintsArrow')" class="bg-slate-100/50 px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-slate-100 transition-colors border-b border-slate-200">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xl">📚</span>
-                        <h2 class="text-lg font-bold text-slate-900">Stored Blend Blueprints & Recipe Review</h2>
-                    </div>
-                    <span id="blueprintsArrow" class="toggle-icon text-slate-500 font-bold text-lg">▼</span>
-                </div>
-
-                <div id="blueprintsContent" class="accordion-content p-6 space-y-6">
-                    <div id="savedRecipesList" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[220px] overflow-y-auto pr-1"></div>
-                    <div id="macroRecipeView" class="hidden bg-slate-900 text-slate-100 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-md transition-all"></div>
-                </div>
-            </section>
-
-            <section class="space-y-4">
-                <div class="flex items-center gap-2 px-2">
-                    <span class="text-xl">🌿</span>
-                    <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Master Skincare Ingredient Directory</h2>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white p-4 rounded-xl border border-slate-200">
-                    <div class="md:col-span-2">
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Live Inventory Search</label>
-                        <input type="text" id="searchBar" oninput="renderDirectory()" placeholder="Search names, profiles, safety details, targeted therapeutic uses..." class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg outline-none text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Filter by Health Target</label>
-                        <select id="benefitFilter" onchange="renderDirectory()" class="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg outline-none text-sm focus:bg-white focus:ring-2 focus:ring-emerald-500 text-slate-600">
-                            <option value="all">⚡ All Health Target Uses</option>
-                            <option value="Skin Healing">🩹 Skin Healing & Skincare</option>
-                            <option value="Eczema">💧 Eczema & Skin Barrier Help</option>
-                            <option value="Poison Ivy">🍃 Poison Ivy & Rash Relief</option>
-                            <option value="Spider Veins">🦵 Spider Veins & Circulation</option>
-                            <option value="Tummy Pain">🍃 Tummy Pain & IBS Support</option>
-                            <option value="Anxiety">🧠 Anxiety, Stress & Sleep</option>
-                            <option value="Articles">🦴 Arthritis & Joint Inflammation</option>
-                            <option value="Muscle Pain">💪 Muscle Pain & Spasms</option>
-                            <option value="Bugs">🦟 Bug & Pest Defense</option>
-                            <option value="Teeth">🦷 Teeth & Oral Care</option>
+                                <p class="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Total
