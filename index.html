@@ -25,7 +25,6 @@
                 <p class="text-xs text-emerald-100 uppercase tracking-widest mt-0.5">R&D Lab & Commercial Costing Portal</p>
             </div>
             
-            <!-- Dual Tab Navigation System -->
             <nav class="flex bg-emerald-800/60 p-1 rounded-xl border border-emerald-600/30">
                 <button onclick="switchTab('oil')" id="tabBtn_oil" class="px-4 py-2 text-xs font-bold rounded-lg transition-all bg-emerald-600 text-white shadow-xs">
                     🌿 Oil Lab
@@ -85,7 +84,7 @@
                             <div class="flex justify-between items-center mb-1">
                                 <label class="text-xs font-semibold uppercase tracking-wider text-slate-500">Dilution</label>
                                 <span id="dilutionValue" class="text-xs font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">2%</span>
-                        </div>
+                            </div>
                             <input type="range" id="dilutionRate" min="0.5" max="5" step="0.5" value="2" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600 mt-2">
                         </div>
                     </div>
@@ -252,6 +251,7 @@
                 </div>
 
                 <div id="sauceCalcContent" class="accordion-content p-6 space-y-6">
+                    <!-- Batch Variables -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Target Yield Volume</label>
@@ -274,6 +274,7 @@
                         </div>
                     </div>
 
+                    <!-- Packaging Unit Costs -->
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                         <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">📦 Bottle & Labeling Materials Supply Pricing</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -301,69 +302,19 @@
                         </div>
                     </div>
 
+                    <!-- NEW: Dynamic Dynamic Culinary Formulation Builder Matrix -->
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
                         <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">🌾 Ingredient Composition Matrix</h3>
-                            <span class="text-xs font-semibold text-slate-500">Measure unit: Grams (g)</span>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">🌾 Dynamic Recipe Composition Matrix</h3>
+                            <button type="button" onclick="addSauceIngredientRow()" class="text-xs font-bold text-amber-700 hover:text-amber-900 bg-amber-100 hover:bg-amber-200 px-2.5 py-1 rounded transition-colors">+ Add Ingredient to Sauce</button>
                         </div>
                         
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-3">
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-600 mb-1">Hot Pepper Base (e.g. Fenix Mash)</label>
-                                    <div class="flex gap-2">
-                                        <input type="number" id="ing_peppers_w" value="1200" class="w-28 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none focus:border-amber-500" oninput="calculateSauce()">
-                                        <input type="number" id="ing_peppers_c" value="6.50" step="0.01" class="w-24 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none" oninput="calculateSauce()">
-                                        <span class="text-[10px] text-slate-400 self-center">$/kg</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-600 mb-1">Vinegar / Acid Blend</label>
-                                    <div class="flex gap-2">
-                                        <input type="number" id="ing_vinegar_w" value="800" class="w-28 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none focus:border-amber-500" oninput="calculateSauce()">
-                                        <input type="number" id="ing_vinegar_c" value="1.80" step="0.01" class="w-24 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none" oninput="calculateSauce()">
-                                        <span class="text-[10px] text-slate-400 self-center">$/kg</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-600 mb-1">Water / Liquid Filter</label>
-                                    <div class="flex gap-2">
-                                        <input type="number" id="ing_water_w" value="500" class="w-28 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none focus:border-amber-500" oninput="calculateSauce()">
-                                        <input type="number" id="ing_water_c" value="0.00" step="0.01" class="w-24 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none" oninput="calculateSauce()">
-                                        <span class="text-[10px] text-slate-400 self-center">$/kg</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="space-y-3">
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-600 mb-1">Alliums & Aromatics (Onion/Garlic)</label>
-                                    <div class="flex gap-2">
-                                        <input type="number" id="ing_alliums_w" value="300" class="w-28 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none focus:border-amber-500" oninput="calculateSauce()">
-                                        <input type="number" id="ing_alliums_c" value="3.20" step="0.01" class="w-24 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none" oninput="calculateSauce()">
-                                        <span class="text-[10px] text-slate-400 self-center">$/kg</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-600 mb-1">Salt, Spices & Extractive Powders</label>
-                                    <div class="flex gap-2">
-                                        <input type="number" id="ing_spices_w" value="80" class="w-28 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none focus:border-amber-500" oninput="calculateSauce()">
-                                        <input type="number" id="ing_spices_c" value="8.00" step="0.01" class="w-24 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none" oninput="calculateSauce()">
-                                        <span class="text-[10px] text-slate-400 self-center">$/kg</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-600 mb-1">Golden Sting Sweetener (e.g. Infused Honey)</label>
-                                    <div class="flex gap-2">
-                                        <input type="number" id="ing_honey_w" value="250" class="w-28 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none focus:border-amber-500" oninput="calculateSauce()">
-                                        <input type="number" id="ing_honey_c" value="12.00" step="0.01" class="w-24 px-2 py-1 bg-white border border-slate-300 rounded text-xs outline-none" oninput="calculateSauce()">
-                                        <span class="text-[10px] text-slate-400 self-center">$/kg</span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div id="sauceIngredientsContainer" class="space-y-2">
+                            <!-- Dynamic row listings inject here -->
                         </div>
                     </div>
 
+                    <!-- Financial Outputs Header Dashboard -->
                     <div class="bg-slate-900 text-slate-100 p-5 rounded-xl shadow-inner">
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                             <div>
@@ -407,12 +358,39 @@
                     <div id="macroSauceView" class="hidden bg-slate-900 text-slate-100 p-6 rounded-2xl border border-slate-800 space-y-4 shadow-md transition-all"></div>
                 </div>
             </section>
+
+            <!-- NEW: SECTION 3: RE-ENGINEERED MASTER CULINARY INVENTORY VIEW -->
+            <section class="space-y-4">
+                <div class="flex items-center gap-2 px-2">
+                    <span class="text-xl">🌶️</span>
+                    <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Master Culinary Ingredient Directory</h2>
+                </div>
+                
+                <!-- Category Select Filters -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 flex gap-2 overflow-x-auto">
+                    <button onclick="filterSauceInventory('all')" class="bg-amber-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">All Ingredients</button>
+                    <button onclick="filterSauceInventory('Peppers')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap">Peppers</button>
+                    <button onclick="filterSauceInventory('Sweeteners')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap">Sweeteners</button>
+                    <button onclick="filterSauceInventory('Vinegars')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap">Vinegars & Acids</button>
+                    <button onclick="filterSauceInventory('Alliums')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap">Alliums & Aromatics</button>
+                    <button onclick="filterSauceInventory('Spices')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap">Spices & Powders</button>
+                    <button onclick="filterSauceInventory('Produce')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap">Fruits & Vegetables</button>
+                </div>
+
+                <div id="sauceInventoryGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dynamic rendering engine adds cards here -->
+                </div>
+            </section>
         </div>
 
     </main>
 
     <script>
-        // 1. Fully-Updated Master Inventory Data Array
+        // ==========================================
+        // DATABASE ARCHITECTURE: MASTER MATRICES     
+        // ==========================================
+        
+        // 1. Master Essential Oils Matrix
         const essentialOils = [
             { name: "Bergamot", botanical: "Citrus bergamia", profile: "Citrus, Floral, Complex", benefits: ["Skin Healing", "Tummy Pain", "Anxiety", "Arthritis"], safety: "Highly phototoxic. Avoid UV/sun exposure for 12 hours after use unless using Bergapten-Free (FCF).", tips: "Madison's Note: Reduces stress, stimulates circulation, improves digestion, and alleviates pain.", defCost: 18.50, defSize: 1 },
             { name: "Black Pepper", botanical: "Piper nigrum", profile: "Sharp, Hot, Spicy, Peppery", benefits: ["Arthritis"], safety: "Can cause skin flushing and irritation if over-applied. Dilute carefully.", tips: "Brings intense localized warmth and circulation directly to cold, stiff joints.", defCost: 22.00, defSize: 1 },
@@ -451,8 +429,44 @@
             { name: "Valerian Root", botanical: "Valeriana officinalis", profile: "Heavy, Musky, Earthy, Pungent", benefits: ["Anxiety"], safety: "Strong sedative. Do not operate machinery or drive vehicles after use.", tips: "Madison's Note: Powerful sedative properties, relieves insomnia, targets nervous tension, aids skin/hair issues, helps anxiety/stress, and lowers blood pressure.", defCost: 26.00, defSize: 1 },
             { name: "Vetiver", botanical: "Cruseogopon zizanioides", profile: "Deep, Smoky, Earthy, Heavy Wood", benefits: ["Anxiety"], safety: "Very gentle, non-irritating, and non-sensitizing.", tips: "Known as the 'Oil of Tranquility'. Incredible base note for profound grounding.", defCost: 32.00, defSize: 1 },
             { name: "Wintergreen", botanical: "Gaultheria procumbens", profile: "Strong, Sweet, Minty, Pungent", benefits: ["Teeth", "Respiratory Support", "Fights Bacteria", "Skin Healing", "Muscle Pain"], safety: "Contains methyl salicylate. Avoid if taking blood thinners or if aspirin-sensitive.", tips: "Madison's Note: Treats bacterial infections, colds, headaches, colic, skin conditions, sore throats, and tooth decay. Major element in muscle pain formulas.", defCost: 16.00, defSize: 2 },
-            { name: "Yarrow", botanical: "Achillea millefolium", profile: "Sweet, Sharp, Herbaceous (Often Blue)", benefits: ["Skin Healing", "Spider Veins", "Muscle Pain"], safety: "May cause skin sensitization in rare cases. Avoid during pregnancy.", tips: "Madison's Note: Vital component for the custom muscle pain blend and spider vein reduction script.", defCost: 29.00, defSize: 0.5 },
+            { name: "Yarrow", botanical: "Achillea millefolium", profile: "Sweet, Sharp, Herbaceous (Often Blue)", benefits: ["Skin Healing", "Spider Veins", "Muscle Pain"], safety: "May cause skin sensitization in rare cases. Avoid during pregnancy.", tips: "Vital component for the custom muscle pain blend and spider vein reduction script.", defCost: 29.00, defSize: 0.5 },
             { name: "Ylang Ylang", botanical: "Cananga odorata", profile: "Intense, Sweet, Exotic Floral", benefits: ["Tummy Pain", "Fights Bacteria", "Anxiety"], safety: "Can cause headaches if used in excess; maximum safe dermal limit of 0.8%.", tips: "Madison's Note: Eases anxiety, insomnia, acts as a digestive aid, reduces inflammation, boosts energy/mood, and features in the tummy pain formulation.", defCost: 24.00, defSize: 1 }
+        ];
+
+        // 2. NEW: Master Multi-Category Culinary Matrix Dictionary
+        const culinaryInventory = [
+            // Category: Peppers
+            { name: "Jalapeño", category: "Peppers", profile: "Crisp, Green, Bright, Vegetal", metrics: "2,500 - 8,000 SHU", defCost: 4.50 },
+            { name: "Habanero", category: "Peppers", profile: "Fruity, Tropical, Floral, High Heat", metrics: "100,000 - 350,000 SHU", defCost: 8.50 },
+            { name: "Ghost Pepper (Bhut Jolokia)", category: "Peppers", profile: "Smoky, Sweet, Intense Searing Heat", metrics: "850,000 - 1,000,000 SHU", defCost: 18.00 },
+            { name: "Cayenne", category: "Peppers", profile: "Neutral, Sharp, Pungent Heat", metrics: "30,000 - 50,000 SHU", defCost: 6.00 },
+            { name: "Carolina Reaper", category: "Peppers", profile: "Sweet, Fruity, Brutal Volcano Heat", metrics: "1,400,000 - 2,200,000 SHU", defCost: 26.00 },
+            
+            // Category: Sweeteners
+            { name: "Raw Local Honey", category: "Sweeteners", profile: "Rich, Floral, Thick, Smooth", metrics: "Brix 80°", defCost: 12.00 },
+            { name: "Organic Cane Sugar", category: "Sweeteners", profile: "Clean, Neutral Sweet", metrics: "Granulated", defCost: 2.20 },
+            { name: "Pure Maple Syrup", category: "Sweeteners", profile: "Woody, Caramel, Earthy Sweet", metrics: "Grade A Dark", defCost: 14.50 },
+            
+            // Category: Vinegars & Acids
+            { name: "Apple Cider Vinegar", category: "Vinegars", profile: "Tangy, Fruity, Mildly Sweet", metrics: "5% Acidity", defCost: 1.80 },
+            { name: "White Distilled Vinegar", category: "Vinegars", profile: "Sharp, Clean, Neutral Acid", metrics: "5% Acidity", defCost: 0.95 },
+            { name: "Lime Juice (Fresh)", category: "Vinegars", profile: "Bright, Sour, Citrusy, Punchy", metrics: "Pure Citrus", defCost: 4.00 },
+            
+            // Category: Alliums & Aromatics
+            { name: "White Onion", category: "Alliums", profile: "Sharp, Pungent, Sweets when cooked", metrics: "Fresh Bulb", defCost: 1.50 },
+            { name: "Garlic (Cloves)", category: "Alliums", profile: "Savory, Earthy, Pungent, Spicy", metrics: "Fresh Heads", defCost: 5.20 },
+            { name: "Shallots", category: "Alliums", profile: "Mild, Delicate Onion-Garlic hybrid", metrics: "Fresh Bulb", defCost: 4.80 },
+
+            // Category: Spices & Powders
+            { name: "Sea Salt (Fine)", category: "Spices", profile: "Clean Mineral Salinity", metrics: "Sodium Enhancer", defCost: 1.20 },
+            { name: "Smoked Paprika", category: "Spices", profile: "Deep Woody Smoke, Sweet Earth", metrics: "Mild Powder", defCost: 9.50 },
+            { name: "Cumin (Ground)", category: "Spices", profile: "Warm, Warm-Earthy, Savory", metrics: "Aromatic Seed", defCost: 11.00 },
+            { name: "Black Pepper (Coarse)", category: "Spices", profile: "Pungent, Piney Woody Heat", metrics: "Piperine Kick", defCost: 8.50 },
+
+            // Category: Fruits & Vegetables
+            { name: "Roasted Mango", category: "Produce", profile: "Tropical, Sweet, Juicy, Custard-like", metrics: "Fresh Fruit", defCost: 3.50 },
+            { name: "Fresh Pineapple", category: "Produce", profile: "Tart, Sweet, High-Acid Tropical", metrics: "Fresh Fruit", defCost: 2.80 },
+            { name: "Carrots (Fresh)", category: "Produce", profile: "Sweet, Earthy, Bulking Agent", metrics: "Root Crop", defCost: 1.10 }
         ];
 
         const carrierPrices = { jojoba: 2.50, coconut: 0.80, almond: 0.95, lard: 0.45, shea: 1.20 };
@@ -475,6 +489,7 @@
                 sauceTab.classList.remove('hidden');
                 oilBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all text-emerald-200 hover:text-white";
                 sauceBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition-all bg-amber-600 text-white shadow-xs";
+                renderSauceInventory('all');
                 calculateSauce();
             }
         }
@@ -488,7 +503,7 @@
         }
 
         // ==========================================
-        // SYSTEM ENGINE: OIL WORKSPACE CORE LOGIC   
+        // SYSTEM ENGINE: OIL LAB LOGIC               
         // ==========================================
         function addOilRow(oilName = "", dropsValue = 0) {
             const container = document.getElementById('oilRowsContainer');
@@ -535,7 +550,6 @@
             const packageUnitTotal = jarCost + lidCost + labelCost;
 
             document.getElementById('dilutionValue').innerText = (rate * 100).toFixed(1) + '%';
-            
             const eoAmount = size * rate;
             const carrierAmount = size - eoAmount;
             
@@ -546,15 +560,10 @@
             if (unit === 'mL') sizeInOz = size * 0.033814;
             else if (unit === 'g') sizeInOz = size * 0.035274; 
 
-            let budgetDrops = 0;
-            if (unit === 'oz') budgetDrops = eoAmount * 600;
-            else if (unit === 'mL') budgetDrops = eoAmount * 20;
-            else if (unit === 'g') budgetDrops = eoAmount * 20;
-
+            let budgetDrops = unit === 'oz' ? eoAmount * 600 : eoAmount * 20;
             document.getElementById('totalBudgetDrops').innerText = Math.round(budgetDrops);
 
-            let assignedDrops = 0;
-            let totalEoCost = 0;
+            let assignedDrops = 0, totalEoCost = 0;
             const dynamicOilCosts = JSON.parse(localStorage.getItem('famOilLabCosts')) || {};
 
             document.querySelectorAll('#oilRowsContainer > div').forEach(row => {
@@ -567,19 +576,12 @@
                 if (match) {
                     const price = dynamicOilCosts[`${oilName}_price`] !== undefined ? parseFloat(dynamicOilCosts[`${oilName}_price`]) : match.defCost;
                     const netSize = dynamicOilCosts[`${oilName}_size`] !== undefined ? parseFloat(dynamicOilCosts[`${oilName}_size`]) : match.defSize;
-                    const costPerDrop = price / (netSize * 600);
-                    totalEoCost += (drops * costPerDrop);
+                    totalEoCost += (drops * (price / (netSize * 600)));
                 }
             });
 
-            const carrierCostPerOz = carrierPrices[chosenCarrier] || 0;
-            const totalCarrierCost = (carrierAmount * (sizeInOz / size)) * carrierCostPerOz;
-            
-            const totalIngredientCost = totalCarrierCost + totalEoCost;
-            const packagingUnitsCount = sizeInOz / 4; 
-            const totalPackagingCost = packagingUnitsCount * packageUnitTotal;
-            const totalBatchCost = totalIngredientCost + totalPackagingCost;
-            const trueCostPerJar = totalBatchCost / (packagingUnitsCount > 0 ? packagingUnitsCount : 1);
+            const totalBatchCost = ((carrierAmount * (sizeInOz / size)) * (carrierPrices[chosenCarrier] || 0)) + totalEoCost + ((sizeInOz / 4) * packageUnitTotal);
+            const trueCostPerJar = totalBatchCost / ((sizeInOz / 4) > 0 ? (sizeInOz / 4) : 1);
 
             document.getElementById('totalCostResult').innerText = isNaN(totalBatchCost) ? "$0.00" : `$${totalBatchCost.toFixed(2)}`;
             document.getElementById('unitCostResult').innerText = isNaN(trueCostPerJar) ? "$0.00" : `$${trueCostPerJar.toFixed(2)}`;
@@ -588,212 +590,88 @@
             document.getElementById('allocatedDrops').innerText = assignedDrops;
             const remainingEl = document.getElementById('remainingDrops');
             remainingEl.innerText = remaining;
-
-            if (remaining < 0) {
-                remainingEl.className = "text-sm font-mono font-extrabold text-rose-500";
-            } else if (remaining === 0) {
-                remainingEl.className = "text-sm font-mono font-extrabold text-sky-400";
-            } else {
-                remainingEl.className = "text-sm font-mono font-extrabold text-emerald-400";
-            }
+            remainingEl.className = remaining < 0 ? "text-sm font-mono font-extrabold text-rose-500" : (remaining === 0 ? "text-sm font-mono font-extrabold text-sky-400" : "text-sm font-mono font-extrabold text-emerald-400");
         }
 
         function saveRecipe() {
             const name = document.getElementById('recipeName').value.trim();
-            if (!name) { alert("Please type a blueprint name before saving."); return; }
-
+            if (!name) return;
             const recipe = {
-                name,
-                size: document.getElementById('batchSize').value,
-                unit: document.getElementById('batchUnit').value,
-                dilution: document.getElementById('dilutionRate').value,
-                carrier: document.getElementById('carrierSelect').value,
-                jarCost: document.getElementById('jarCost').value,
-                lidCost: document.getElementById('lidCost').value,
-                labelCost: document.getElementById('labelCost').value,
-                ingredients: Array.from(document.querySelectorAll('#oilRowsContainer > div')).map(row => ({
-                    oil: row.querySelector('.row-oil').value,
-                    drops: parseInt(row.querySelector('.row-drops').value) || 0
-                })).filter(ing => ing.oil),
-                totalCostText: document.getElementById('totalCostResult').innerText,
-                unitCostText: document.getElementById('unitCostResult').innerText,
-                timestamp: Date.now()
+                name, size: document.getElementById('batchSize').value, unit: document.getElementById('batchUnit').value, dilution: document.getElementById('dilutionRate').value, carrier: document.getElementById('carrierSelect').value, jarCost: document.getElementById('jarCost').value, lidCost: document.getElementById('lidCost').value, labelCost: document.getElementById('labelCost').value,
+                ingredients: Array.from(document.querySelectorAll('#oilRowsContainer > div')).map(row => ({ oil: row.querySelector('.row-oil').value, drops: parseInt(row.querySelector('.row-drops').value) || 0 })).filter(ing => ing.oil),
+                totalCostText: document.getElementById('totalCostResult').innerText, unitCostText: document.getElementById('unitCostResult').innerText, timestamp: Date.now()
             };
-
             let blueprints = JSON.parse(localStorage.getItem('falledMarketBlueprints')) || [];
-            blueprints.unshift(recipe);
-            localStorage.setItem('falledMarketBlueprints', JSON.stringify(blueprints));
-            document.getElementById('recipeName').value = '';
-            renderSavedRecipes();
+            blueprints.unshift(recipe); localStorage.setItem('falledMarketBlueprints', JSON.stringify(blueprints));
+            document.getElementById('recipeName').value = ''; renderSavedRecipes();
         }
 
         function viewRecipeMacro(index) {
             let blueprints = JSON.parse(localStorage.getItem('falledMarketBlueprints')) || [];
-            const rec = blueprints[index];
-            if (!rec) return;
-
-            const macroPane = document.getElementById('macroRecipeView');
-            macroPane.classList.remove('hidden');
-
-            const ingRowsHtml = rec.ingredients.map(ing => 
-                `<li class="flex justify-between py-1 border-b border-slate-800 text-xs font-mono">
-                    <span class="text-emerald-400 font-bold">${ing.drops} Drops</span>
-                    <span class="text-slate-200">${ing.oil}</span>
-                </li>`
-            ).join('');
-
+            const rec = blueprints[index]; if (!rec) return;
+            const macroPane = document.getElementById('macroRecipeView'); macroPane.classList.remove('hidden');
+            const ingRowsHtml = rec.ingredients.map(ing => `<li class="flex justify-between py-1 border-b border-slate-800 text-xs font-mono"><span class="text-emerald-400 font-bold">${ing.drops} Drops</span><span class="text-slate-200">${ing.oil}</span></li>`).join('');
             macroPane.innerHTML = `
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-3 gap-2">
-                    <div>
-                        <h3 class="text-lg font-extrabold text-white tracking-tight">🔬 Blueprint Detail: ${rec.name}</h3>
-                    </div>
-                    <button onclick="loadRecipeDirect(${index})" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all shadow-sm">
-                        🧪 Load Back into Calculator
-                    </button>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs font-mono">
-                    <div><span class="text-slate-500 block">Batch Parameters</span><p class="text-white font-semibold mt-0.5">${rec.size} ${rec.unit} @ ${rec.dilution}%</p></div>
-                    <div><span class="text-slate-500 block">Total Batch COGS</span><p class="text-amber-400 font-bold mt-0.5">${rec.totalCostText}</p></div>
-                    <div><span class="text-slate-500 block">Cost Per Jar</span><p class="text-emerald-400 font-bold mt-0.5">${rec.unitCostText}</p></div>
-                </div>
-                <div><ul class="space-y-1 bg-slate-950/40 p-3 rounded-xl border border-slate-800/60 max-h-[150px] overflow-y-auto">${ingRowsHtml}</ul></div>
+                <div class="flex justify-between items-center border-b border-slate-800 pb-2"><h3>🔬 Blueprint: ${rec.name}</h3><button onclick="loadRecipeDirect(${index})" class="bg-emerald-600 text-white text-xs px-3 py-1 rounded">🧪 Load Back</button></div>
+                <div class="grid grid-cols-3 gap-2 bg-slate-950 p-3 rounded text-xs font-mono"><div><span class="text-slate-500 block">Batch</span><p class="text-white">${rec.size}${rec.unit} @ ${rec.dilution}%</p></div><div><span class="text-slate-500 block">Total COGS</span><p class="text-amber-400">${rec.totalCostText}</p></div><div><span class="text-slate-500 block">Per Jar</span><p class="text-emerald-400">${rec.unitCostText}</p></div></div>
+                <div><ul class="space-y-1 bg-slate-950/40 p-3 rounded border border-slate-800/60 max-h-[150px] overflow-y-auto">${ingRowsHtml}</ul></div>
             `;
             macroPane.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function loadRecipeDirect(index) {
             let blueprints = JSON.parse(localStorage.getItem('falledMarketBlueprints')) || [];
-            const recipe = blueprints[index];
-            if (!recipe) return;
-
-            document.getElementById('batchSize').value = recipe.size;
-            document.getElementById('batchUnit').value = recipe.unit;
-            document.getElementById('dilutionRate').value = recipe.dilution;
-            document.getElementById('carrierSelect').value = recipe.carrier || 'coconut';
-            if(recipe.jarCost !== undefined) document.getElementById('jarCost').value = recipe.jarCost;
-            if(recipe.lidCost !== undefined) document.getElementById('lidCost').value = recipe.lidCost;
-            if(recipe.labelCost !== undefined) document.getElementById('labelCost').value = recipe.labelCost;
-
-            const container = document.getElementById('oilRowsContainer');
-            container.innerHTML = '';
-            recipe.ingredients.forEach(ing => addOilRow(ing.oil, ing.drops));
-            calculateFormulation();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const recipe = blueprints[index]; if (!recipe) return;
+            document.getElementById('batchSize').value = recipe.size; document.getElementById('batchUnit').value = recipe.unit; document.getElementById('dilutionRate').value = recipe.dilution; document.getElementById('carrierSelect').value = recipe.carrier || 'coconut';
+            if(recipe.jarCost) document.getElementById('jarCost').value = recipe.jarCost; if(recipe.lidCost) document.getElementById('lidCost').value = recipe.lidCost; if(recipe.labelCost) document.getElementById('labelCost').value = recipe.labelCost;
+            document.getElementById('oilRowsContainer').innerHTML = ''; recipe.ingredients.forEach(ing => addOilRow(ing.oil, ing.drops)); calculateFormulation(); window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function deleteRecipe(index, event) {
-            event.stopPropagation();
-            if(!confirm("Delete this recipe?")) return;
-            let blueprints = JSON.parse(localStorage.getItem('falledMarketBlueprints')) || [];
-            blueprints.splice(index, 1);
-            localStorage.setItem('falledMarketBlueprints', JSON.stringify(blueprints));
-            document.getElementById('macroRecipeView').classList.add('hidden');
-            renderSavedRecipes();
+            event.stopPropagation(); if(!confirm("Delete?")) return;
+            let blueprints = JSON.parse(localStorage.getItem('falledMarketBlueprints')) || []; blueprints.splice(index, 1);
+            localStorage.setItem('falledMarketBlueprints', JSON.stringify(blueprints)); document.getElementById('macroRecipeView').classList.add('hidden'); renderSavedRecipes();
         }
 
         function renderSavedRecipes() {
             const container = document.getElementById('savedRecipesList');
             let blueprints = JSON.parse(localStorage.getItem('falledMarketBlueprints')) || [];
-            if (blueprints.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 italic py-2 text-center col-span-full">No saved experimental blueprints yet.</p>`;
-                return;
-            }
+            if (blueprints.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 italic py-2 text-center col-span-full">No blueprints yet.</p>`; return; }
             container.innerHTML = blueprints.map((rec, i) => `
-                <div onclick="viewRecipeMacro(${i})" class="group bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 p-3 rounded-xl flex justify-between items-center cursor-pointer transition-all">
-                    <div class="flex-1 min-w-0 pr-2">
-                        <div class="flex items-center gap-1.5"><span class="text-xs font-bold text-slate-900 truncate">${rec.name}</span></div>
-                        <p class="text-[10px] text-slate-500 mt-0.5 font-mono">${rec.size}${rec.unit} @ ${rec.dilution}% — Cost: <span class="text-emerald-600 font-bold">${rec.unitCostText || '--'}</span></p>
-                    </div>
-                    <button onclick="deleteRecipe(${i}, event)" class="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-rose-600 font-bold text-xs p-1 transition-all">✕</button>
+                <div onclick="viewRecipeMacro(${i})" class="group bg-slate-50 hover:bg-emerald-50 border border-slate-200 p-3 rounded-xl flex justify-between items-center cursor-pointer text-xs font-mono">
+                    <div class="flex-1 min-w-0 pr-2"><strong>${rec.name}</strong><p class="text-[10px] text-slate-500">${rec.size}${rec.unit} @ ${rec.dilution}% — Cost: <span class="text-emerald-600 font-bold">${rec.unitCostText}</span></p></div>
+                    <button onclick="deleteRecipe(${i}, event)" class="opacity-0 group-hover:opacity-100 text-rose-600 font-bold p-1">✕</button>
                 </div>
             `).join('');
         }
 
-        function saveOilPriceMetrics(oilName) {
-            let allCosts = JSON.parse(localStorage.getItem('famOilLabCosts')) || {};
-            allCosts[`${oilName}_price`] = parseFloat(document.getElementById(`cost_input_${oilName}`).value) || 0;
-            allCosts[`${oilName}_size`] = parseFloat(document.getElementById(`size_input_${oilName}`).value) || 1;
-            localStorage.setItem('famOilLabCosts', JSON.stringify(allCosts));
-            calculateFormulation(); 
-        }
-
-        function saveCustomOilNote(oilName) {
-            let allNotes = JSON.parse(localStorage.getItem('famOilLabNotes')) || {};
-            allNotes[oilName] = document.getElementById(`note_input_${oilName}`).value.trim();
-            localStorage.setItem('famOilLabNotes', JSON.stringify(allNotes));
-            renderDirectory();
-        }
-
-        // RESTORED MASTER DIRECTORY CARD RENDERING SYSTEM
         function renderDirectory() {
             const searchQuery = document.getElementById('searchBar').value.toLowerCase();
             const selectedBenefit = document.getElementById('benefitFilter').value;
             const grid = document.getElementById('oilGrid');
             const emptyView = document.getElementById('emptyView');
-            
             const savedNotes = JSON.parse(localStorage.getItem('famOilLabNotes')) || {};
             const savedCosts = JSON.parse(localStorage.getItem('famOilLabCosts')) || {};
-            
             grid.innerHTML = '';
             
             const filtered = essentialOils.filter(oil => {
                 const customNote = (savedNotes[oil.name] || '').toLowerCase();
-                const matchesSearch = oil.name.toLowerCase().includes(searchQuery) || 
-                                      oil.profile.toLowerCase().includes(searchQuery) ||
-                                      oil.tips.toLowerCase().includes(searchQuery) ||
-                                      customNote.includes(searchQuery) ||
-                                      oil.benefits.some(b => b.toLowerCase().includes(searchQuery));
-                const matchesBenefit = selectedBenefit === 'all' || oil.benefits.includes(selectedBenefit);
-                return matchesSearch && matchesBenefit;
+                return (oil.name.toLowerCase().includes(searchQuery) || oil.profile.toLowerCase().includes(searchQuery) || oil.tips.toLowerCase().includes(searchQuery) || customNote.includes(searchQuery) || oil.benefits.some(b => b.toLowerCase().includes(searchQuery))) && (selectedBenefit === 'all' || oil.benefits.includes(selectedBenefit));
             });
 
-            if (filtered.length === 0) {
-                emptyView.classList.remove('hidden');
-                return;
-            }
+            if (filtered.length === 0) { emptyView.classList.remove('hidden'); return; }
             emptyView.classList.add('hidden');
 
             filtered.forEach(oil => {
                 const card = document.createElement('div');
-                card.className = "oil-card bg-white p-5 rounded-2xl shadow-xs border border-slate-200 flex flex-col justify-between";
-                
-                const tagsHtml = oil.benefits.map(b => 
-                    `<span class="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">${b}</span>`
-                ).join('');
-
-                const isWarningHeavy = oil.safety.includes("CRITICAL") || oil.safety.includes("Phototoxic") || oil.safety.includes("Avoid");
-                const safetyClass = isWarningHeavy ? "bg-amber-50 text-amber-950 border border-amber-200" : "bg-slate-50 text-slate-600";
-                
+                card.className = "oil-card bg-white p-5 rounded-2xl shadow-xs border border-slate-200 flex flex-col justify-between text-xs";
+                const tagsHtml = oil.benefits.map(b => `<span class="text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded">${b}</span>`).join('');
                 const currentPrice = savedCosts[`${oil.name}_price`] !== undefined ? savedCosts[`${oil.name}_price`] : oil.defCost;
                 const currentSize = savedCosts[`${oil.name}_size`] !== undefined ? savedCosts[`${oil.name}_size`] : oil.defSize;
 
                 card.innerHTML = `
-                    <div>
-                        <div class="flex justify-between items-baseline gap-2 mb-2">
-                            <h3 class="text-lg font-bold text-slate-900">${oil.name}</h3>
-                            <span class="text-xs italic text-slate-400 font-mono">${oil.botanical}</span>
-                        </div>
-                        <p class="text-xs font-medium text-slate-500 mb-2">Scent Profile: <span class="font-normal text-slate-600">${oil.profile}</span></p>
-                        <div class="flex flex-wrap gap-1 mb-4">${tagsHtml}</div>
-                        <p class="text-xs text-slate-700 leading-relaxed mb-4"><strong>Formulation Note:</strong> ${oil.tips}</p>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Cost ($)</label>
-                                <input type="number" id="cost_input_${oil.name}" value="${currentPrice}" step="0.01" class="w-full text-xs px-2 py-1 bg-white border border-slate-300 rounded outline-none" oninput="saveOilPriceMetrics('${oil.name}')">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Net Size (Oz)</label>
-                                <input type="number" id="size_input_${oil.name}" value="${currentSize}" step="0.01" class="w-full text-xs px-2 py-1 bg-white border border-slate-300 rounded outline-none" oninput="saveOilPriceMetrics('${oil.name}')">
-                            </div>
-                        </div>
-                        <div class="text-[11px] p-3 rounded-xl ${safetyClass}"><strong>⚠️ Safety:</strong> ${oil.safety}</div>
-                        <div class="border-t border-slate-100 pt-3">
-                            <textarea id="note_input_${oil.name}" placeholder="Type custom logs here..." class="w-full text-xs p-2 bg-slate-50/50 border border-slate-200 rounded-lg outline-none min-h-[50px]">${savedNotes[oil.name] || ''}</textarea>
-                            <div class="flex justify-end mt-1"><button onclick="saveCustomOilNote('${oil.name}')" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded">💾 Save Note</button></div>
-                        </div>
-                    </div>
+                    <div><div class="flex justify-between items-baseline gap-2 mb-2"><h3 class="text-lg font-bold text-slate-900">${oil.name}</h3><span class="text-xs italic text-slate-400 font-mono">${oil.botanical}</span></div><p class="text-xs font-medium text-slate-500 mb-2">Scent: ${oil.profile}</p><div class="flex flex-wrap gap-1 mb-4">${tagsHtml}</div><p class="text-slate-700 leading-relaxed mb-4"><strong>Note:</strong> ${oil.tips}</p></div>
+                    <div class="space-y-3"><div class="bg-slate-50 border border-slate-200 rounded-xl p-3 grid grid-cols-2 gap-3"><div><label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Cost ($)</label><input type="number" id="cost_input_${oil.name}" value="${currentPrice}" step="0.01" class="w-full bg-white border border-slate-300 rounded px-2 py-0.5" oninput="saveOilPriceMetrics('${oil.name}')"></div><div><label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Net Size (Oz)</label><input type="number" id="size_input_${oil.name}" value="${currentSize}" step="0.01" class="w-full bg-white border border-slate-300 rounded px-2 py-0.5" oninput="saveOilPriceMetrics('${oil.name}')"></div></div><div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px]"><strong>⚠️ Safety:</strong> ${oil.safety}</div><div class="border-t border-slate-100 pt-3"><textarea id="note_input_${oil.name}" placeholder="Custom logs..." class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg min-h-[50px]">${savedNotes[oil.name] || ''}</textarea><div class="flex justify-end mt-1"><button onclick="saveCustomOilNote('${oil.name}')" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded">💾 Save</button></div></div></div>
                 `;
                 grid.appendChild(card);
             });
@@ -802,6 +680,49 @@
         // ==========================================
         // SYSTEM ENGINE: HOT SAUCE LAB LOGIC         
         // ==========================================
+        
+        // NEW: Dynamic row generation loop for hot sauce recipe composition matrix builder
+        function addSauceIngredientRow(ingName = "", gramsValue = 0) {
+            const container = document.getElementById('sauceIngredientsContainer');
+            const rowId = 'srow_' + Date.now() + Math.random().toString(36).substr(2, 5);
+            const rowDiv = document.createElement('div');
+            rowDiv.className = "flex gap-2 items-center bg-white p-2 rounded-lg border border-slate-200 shadow-2xs";
+            rowDiv.id = rowId;
+
+            // Generate grouped dropdown selection loops alphabetized inside categories
+            let optionsHtml = `<option value="">-- Choose an Ingredient --</option>`;
+            
+            // Extract unique categories dynamically to build select option groups
+            const categories = ["Peppers", "Sweeteners", "Vinegars", "Alliums", "Spices", "Produce"];
+            categories.forEach(cat => {
+                optionsHtml += `<optgroup label="📂 ${cat}">`;
+                culinaryInventory.filter(i => i.category === cat).forEach(item => {
+                    const selected = item.name === ingName ? 'selected' : '';
+                    optionsHtml += `<option value="${item.name}" ${selected}>${item.name}</option>`;
+                });
+                optionsHtml += `</optgroup>`;
+            });
+
+            rowDiv.innerHTML = `
+                <select class="row-sauce-ing flex-1 px-2 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs outline-none focus:bg-white" onchange="calculateSauce()">
+                    ${optionsHtml}
+                </select>
+                <div class="flex items-center gap-1 w-28">
+                    <input type="number" value="${gramsValue}" min="0" class="row-sauce-weight w-full px-2 py-1.5 bg-slate-50 border border-slate-300 rounded text-xs text-center outline-none focus:bg-white" oninput="calculateSauce()">
+                    <span class="text-[10px] font-semibold text-slate-400 uppercase">Grams (g)</span>
+                </div>
+                <button type="button" onclick="removeSauceRow('${rowId}')" class="text-slate-400 hover:text-rose-600 px-1 text-sm font-bold transition-colors">✕</button>
+            `;
+            container.appendChild(rowDiv);
+            calculateSauce();
+        }
+
+        function removeSauceRow(id) {
+            const row = document.getElementById(id);
+            if(row) row.remove();
+            calculateSauce();
+        }
+
         function calculateSauce() {
             const batchSize = parseFloat(document.getElementById('sauceBatchSize').value) || 0;
             const batchUnit = document.getElementById('sauceBatchUnit').value;
@@ -811,12 +732,20 @@
             let totalFluidOunces = batchUnit === 'gal' ? batchSize * 128 : batchSize;
             const estimatedBottles = totalFluidOunces / bottleSize;
 
-            const elements = ['peppers', 'vinegar', 'water', 'alliums', 'spices', 'honey'];
             let totalWeightGrams = 0, totalIngredientCost = 0;
-            elements.forEach(el => {
-                const w = parseFloat(document.getElementById(`ing_${el}_w`).value) || 0;
-                totalWeightGrams += w;
-                totalIngredientCost += (w / 1000) * (parseFloat(document.getElementById(`ing_${el}_c`).value) || 0);
+            const dynamicCulinaryCosts = JSON.parse(localStorage.getItem('famCulinaryCosts')) || {};
+
+            document.querySelectorAll('#sauceIngredientsContainer > div').forEach(row => {
+                const ingName = row.querySelector('.row-sauce-ing').value;
+                const grams = parseFloat(row.querySelector('.row-sauce-weight').value) || 0;
+                if (!ingName) return;
+
+                totalWeightGrams += grams;
+                const match = culinaryInventory.find(i => i.name === ingName);
+                if (match) {
+                    const pricePerKg = dynamicCulinaryCosts[`${ingName}_price`] !== undefined ? parseFloat(dynamicCulinaryCosts[`${ingName}_price`]) : match.defCost;
+                    totalIngredientCost += (grams / 1000) * pricePerKg;
+                }
             });
 
             const totalBatchCost = totalIngredientCost + (estimatedBottles * packageUnitTotal);
@@ -829,12 +758,17 @@
         function saveSauceRecipe() {
             const name = document.getElementById('sauceRecipeName').value.trim();
             if (!name) return;
+            
             const recipe = {
                 name, batchSize: document.getElementById('sauceBatchSize').value, batchUnit: document.getElementById('sauceBatchUnit').value, bottleSize: document.getElementById('sauceBottleSize').value,
                 bottleCost: document.getElementById('sauceBottleCost').value, capCost: document.getElementById('sauceCapCost').value, labelCost: document.getElementById('sauceLabelCost').value,
-                ingredients: { peppers: document.getElementById('ing_peppers_w').value, vinegar: document.getElementById('ing_vinegar_w').value, water: document.getElementById('ing_water_w').value, alliums: document.getElementById('ing_alliums_w').value, spices: document.getElementById('ing_spices_w').value, honey: document.getElementById('ing_honey_w').value },
+                ingredients: Array.from(document.querySelectorAll('#sauceIngredientsContainer > div')).map(row => ({
+                    name: row.querySelector('.row-sauce-ing').value,
+                    grams: parseFloat(row.querySelector('.row-sauce-weight').value) || 0
+                })).filter(i => i.name),
                 totalCostText: document.getElementById('sauceTotalCost').innerText, unitCostText: document.getElementById('sauceUnitCost').innerText, timestamp: Date.now()
             };
+            
             let blueprints = JSON.parse(localStorage.getItem('famSauceBlueprints')) || [];
             blueprints.unshift(recipe); localStorage.setItem('famSauceBlueprints', JSON.stringify(blueprints));
             document.getElementById('sauceRecipeName').value = ''; renderSavedSauceRecipes();
@@ -844,37 +778,27 @@
             let blueprints = JSON.parse(localStorage.getItem('famSauceBlueprints')) || [];
             const rec = blueprints[index]; if (!rec) return;
             const macroPane = document.getElementById('macroSauceView'); macroPane.classList.remove('hidden');
+            const ingLinesHtml = rec.ingredients.map(i => `<div class="flex justify-between border-b border-slate-800 py-1"><span>${i.name}</span><span class="text-amber-400 font-bold">${i.grams}g</span></div>`).join('');
             macroPane.innerHTML = `
-                <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                    <h3 class="text-sm font-bold text-white">🌶️ Sauce Blueprint: ${rec.name}</h3>
-                    <button onclick="loadSauceRecipeDirect(${index})" class="bg-amber-600 text-white text-[11px] font-bold px-3 py-1 rounded">🧪 Load Back</button>
-                </div>
-                <div class="grid grid-cols-3 gap-2 bg-slate-950 p-3 rounded text-center text-xs font-mono">
-                    <div><span class="text-slate-500 block">Yield</span><p class="text-white">${rec.batchSize}${rec.batchUnit}</p></div>
-                    <div><span class="text-slate-500 block">Total</span><p class="text-amber-400">${rec.totalCostText}</p></div>
-                    <div><span class="text-slate-500 block">Per Unit</span><p class="text-emerald-400">${rec.unitCostText}</p></div>
-                </div>
+                <div class="flex justify-between items-center border-b border-slate-800 pb-2"><h3>🌶️ Sauce Blueprint: ${rec.name}</h3><button onclick="loadSauceRecipeDirect(${index})" class="bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded">🧪 Load Back</button></div>
+                <div class="grid grid-cols-3 gap-2 bg-slate-950 p-3 rounded text-center text-xs font-mono"><div><span class="text-slate-500 block">Yield</span><p class="text-white">${rec.batchSize}${rec.batchUnit}</p></div><div><span class="text-slate-500 block">Total COGS</span><p class="text-amber-400">${rec.totalCostText}</p></div><div><span class="text-slate-500 block">Per Bottle</span><p class="text-emerald-400">${rec.unitCostText}</p></div></div>
+                <div class="space-y-1 font-mono text-xs max-h-[150px] overflow-y-auto bg-slate-950/40 p-3 rounded-xl border border-slate-800/60">${ingLinesHtml}</div>
             `;
+            macroPane.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function loadSauceRecipeDirect(index) {
             let blueprints = JSON.parse(localStorage.getItem('famSauceBlueprints')) || [];
             const rec = blueprints[index]; if (!rec) return;
-            document.getElementById('sauceBatchSize').value = rec.batchSize;
-            document.getElementById('sauceBatchUnit').value = rec.batchUnit;
-            document.getElementById('sauceBottleSize').value = rec.bottleSize;
-            if(rec.bottleCost) document.getElementById('sauceBottleCost').value = rec.bottleCost;
-            if(rec.capCost) document.getElementById('sauceCapCost').value = rec.capCost;
-            if(rec.labelCost) document.getElementById('sauceLabelCost').value = rec.labelCost;
-            Object.keys(rec.ingredients).forEach(k => { document.getElementById(`ing_${k}_w`).value = rec.ingredients[k]; });
-            calculateSauce();
+            document.getElementById('sauceBatchSize').value = rec.batchSize; document.getElementById('sauceBatchUnit').value = rec.batchUnit; document.getElementById('sauceBottleSize').value = rec.bottleSize;
+            if(rec.bottleCost) document.getElementById('sauceBottleCost').value = rec.bottleCost; if(rec.capCost) document.getElementById('sauceCapCost').value = rec.capCost; if(rec.labelCost) document.getElementById('sauceLabelCost').value = rec.labelCost;
+            document.getElementById('sauceIngredientsContainer').innerHTML = ''; rec.ingredients.forEach(i => addSauceIngredientRow(i.name, i.grams)); calculateSauce();
         }
 
         function deleteSauceRecipe(index, event) {
-            event.stopPropagation(); if(!confirm("Delete blueprint?")) return;
-            let blueprints = JSON.parse(localStorage.getItem('famSauceBlueprints')) || [];
-            blueprints.splice(index, 1); localStorage.setItem('famSauceBlueprints', JSON.stringify(blueprints));
-            document.getElementById('macroSauceView').classList.add('hidden'); renderSavedSauceRecipes();
+            event.stopPropagation(); if(!confirm("Delete?")) return;
+            let blueprints = JSON.parse(localStorage.getItem('famSauceBlueprints')) || []; blueprints.splice(index, 1);
+            localStorage.setItem('famSauceBlueprints', JSON.stringify(blueprints)); document.getElementById('macroSauceView').classList.add('hidden'); renderSavedSauceRecipes();
         }
 
         function renderSavedSauceRecipes() {
@@ -883,21 +807,76 @@
             if (blueprints.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 italic py-2 text-center col-span-full">No blueprints yet.</p>`; return; }
             container.innerHTML = blueprints.map((rec, i) => `
                 <div onclick="viewSauceMacro(${i})" class="group bg-slate-50 hover:bg-amber-50 border border-slate-200 p-3 rounded-xl flex justify-between items-center cursor-pointer text-xs font-mono">
-                    <div class="flex-1 min-w-0"><strong>${rec.name}</strong><p class="text-[10px] text-slate-500">${rec.batchSize}${rec.batchUnit} — Bottle Cost: ${rec.unitCostText}</p></div>
+                    <div class="flex-1 min-w-0 pr-2"><strong>${rec.name}</strong><p class="text-[10px] text-slate-500">${rec.batchSize}${rec.batchUnit} — Bottle Cost: <span class="text-emerald-600 font-bold">${rec.unitCostText}</span></p></div>
                     <button onclick="deleteSauceRecipe(${i}, event)" class="opacity-0 group-hover:opacity-100 text-rose-600 font-bold p-1">✕</button>
                 </div>
             `).join('');
         }
 
-        // Global Event Observers Setup
+        // NEW: Persistence metric management for culinary card overrides
+        function saveSaucePriceOverride(ingName) {
+            const priceVal = parseFloat(document.getElementById(`s_cost_${ingName}`).value) || 0;
+            let allCosts = JSON.parse(localStorage.getItem('famCulinaryCosts')) || {};
+            allCosts[`${ingName}_price`] = priceVal;
+            localStorage.setItem('famCulinaryCosts', JSON.stringify(allCosts));
+            calculateSauce();
+        }
+
+        // NEW: Categorical Culinary Card Grid Rendering Engine
+        function renderSauceInventory(categoryFilter = "all") {
+            const grid = document.getElementById('sauceInventoryGrid');
+            const savedCosts = JSON.parse(localStorage.getItem('famCulinaryCosts')) || {};
+            grid.innerHTML = '';
+
+            const filtered = culinaryInventory.filter(i => categoryFilter === 'all' || i.category === categoryFilter);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "sauce-card bg-white p-4 rounded-xl shadow-2xs border border-slate-200 flex flex-col justify-between text-xs";
+                const currentPrice = savedCosts[`${item.name}_price`] !== undefined ? savedCosts[`${item.name}_price`] : item.defCost;
+                
+                // Label tag aesthetics
+                const badgeColor = item.category === 'Peppers' ? 'bg-rose-50 text-rose-700' : 'bg-amber-50 text-amber-700';
+                const metricLabel = item.category === 'Peppers' ? 'Heat Rating' : 'Metric Details';
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start font-bold text-slate-900 mb-1">
+                            <span class="text-sm">${item.name}</span>
+                            <span class="${badgeColor} text-[9px] font-semibold px-2 py-0.5 rounded-md">${item.category}</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 font-medium mb-1.5">${metricLabel}: <span class="font-mono font-bold text-slate-600">${item.metrics}</span></p>
+                        <p class="text-slate-600 leading-normal mb-3"><strong>Profile:</strong> ${item.profile}</p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 flex justify-between items-center gap-2">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Wholesale Cost ($/kg)</label>
+                        <div class="relative w-24">
+                            <span class="absolute inset-y-0 left-0 pl-2 flex items-center text-slate-400">$</span>
+                            <input type="number" id="s_cost_${item.name}" value="${currentPrice}" step="0.01" min="0" 
+                                class="w-full bg-white border border-slate-300 rounded text-right pr-2 pl-5 py-0.5 font-mono text-xs" oninput="saveSaucePriceOverride('${item.name}')">
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Wrapper to bind dynamic category filter triggers
+        function filterSauceInventory(cat) {
+            renderSauceInventory(cat);
+            // Toggle primary state buttons inside bar view if desired
+        }
+
+        // Global Observers Setup
         document.getElementById('batchSize').addEventListener('input', calculateFormulation);
         document.getElementById('batchUnit').addEventListener('change', calculateFormulation);
         document.getElementById('dilutionRate').addEventListener('input', calculateFormulation);
         document.getElementById('searchBar').addEventListener('input', renderDirectory);
         document.getElementById('benefitFilter').addEventListener('change', renderDirectory);
 
-        // Global Boot Bootup Configuration Sequence
+        // Core Bootup Sequence
         addOilRow();
+        addSauceIngredientRow(); // Add one initial blank culinary selection row by default
         calculateFormulation();
         renderDirectory();
         renderSavedRecipes();
